@@ -3,7 +3,7 @@ import importlib.util
 
 def carregar_detectores():
     detectores = []
-    pasta = "intent_plugins"
+    pasta = os.path.join(os.path.dirname(__file__), "../intent_plugins")  # <-- aqui
 
     if not os.path.exists(pasta):
         print(f"⚠️ Pasta '{pasta}' não existe.")
@@ -20,20 +20,7 @@ def carregar_detectores():
 
             for nome_classe in dir(modulo):
                 cls = getattr(modulo, nome_classe)
-
-                # Verifica se é uma classe, tem método detectar, e é instanciável
-                if isinstance(cls, type) and hasattr(cls, "detectar") and callable(getattr(cls, "detectar")):
-                    instancia = cls()
-                    detectores.append(instancia)
+                if hasattr(cls, "detectar") and callable(getattr(cls, "detectar")):
+                    detectores.append(cls)
 
     return detectores
-
-def detectar_intencao(mensagem):
-    for detector in carregar_detectores():
-        try:
-            resultado = detector.detectar(mensagem)
-            if resultado:
-                return resultado
-        except Exception as e:
-            print(f"Erro ao executar detector {detector.__class__.__name__}: {e}")
-    return None
