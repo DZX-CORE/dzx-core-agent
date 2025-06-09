@@ -1,4 +1,3 @@
-# main_chat.py
 import gradio as gr
 from chat_core.responder import responder
 
@@ -9,4 +8,4 @@ chat = gr.ChatInterface(
 )
 
 if __name__ == "__main__":
-    chat.launch(share=True)  # ISSO GERA A URL VISUAL NO COLAB
+    chat.launch(share=True)
