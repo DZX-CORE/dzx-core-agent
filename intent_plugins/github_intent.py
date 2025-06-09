@@ -12,4 +12,7 @@ class GitHubIntent:
         if "sincronizar projeto" in mensagem or "atualizar no github" in mensagem:
             return "github_sync"
 
+        if "analisar repositório" in mensagem or "verificar repo" in mensagem or "inspecionar código" in mensagem:
+            return "github_analisar"
+
         return None
