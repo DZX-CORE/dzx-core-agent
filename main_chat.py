@@ -30,4 +30,4 @@ iface = gr.ChatInterface(
     theme="default"
 )
 
-iface.launch()
+iface.launch(share=True)
