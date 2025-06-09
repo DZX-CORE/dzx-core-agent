@@ -4,17 +4,18 @@ import importlib.util
 
 def carregar_plugins():
     plugins = []
-    pasta = "plugins"
-    for arquivo in os.listdir(pasta):
-        if arquivo.endswith(".py") and not arquivo.startswith("__"):
-            caminho = os.path.join(pasta, arquivo)
-            nome_modulo = f"plugins.{arquivo[:-3]}"
-            try:
-                spec = importlib.util.spec_from_file_location(nome_modulo, caminho)
-                modulo = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(modulo)
-                if hasattr(modulo, "handle"):
-                    plugins.append(modulo)
-            except Exception as e:
-                print(f"[!] Erro ao carregar plugin {arquivo}: {e}")
+    plugins_dir = "plugins"
+
+    for filename in os.listdir(plugins_dir):
+        if filename.endswith(".py") and filename != "__init__.py":
+            filepath = os.path.join(plugins_dir, filename)
+            module_name = filename[:-3]
+
+            spec = importlib.util.spec_from_file_location(module_name, filepath)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            if hasattr(module, "handle"):
+                plugins.append(module)
+
     return plugins
