@@ -1,21 +1,17 @@
 import os
 import importlib.util
 
+base_dir = os.path.dirname(os.path.dirname(__file__))  # raiz do projeto
+plugins_dir = os.path.join(base_dir, "plugins")
+
 def carregar_plugins():
     plugins = []
-    plugins_dir = "plugins"
-
     for filename in os.listdir(plugins_dir):
-        if filename.endswith(".py") and filename != "__init__.py":
-            filepath = os.path.join(plugins_dir, filename)
+        if filename.endswith("_plugin.py"):
             module_name = filename[:-3]
-
-            spec = importlib.util.spec_from_file_location(module_name, filepath)
+            file_path = os.path.join(plugins_dir, filename)
+            spec = importlib.util.spec_from_file_location(module_name, file_path)
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-
-            # Plugins precisam ter essas duas funções para serem carregados
-            if hasattr(module, "suporta_intencao") and hasattr(module, "handle_comando"):
-                plugins.append(module)
-
+            plugins.append(module)
     return plugins
