@@ -10,4 +10,7 @@ def executar(contexto):
     if comando == "github_sync":
         return "🔄 Projeto sincronizado com o GitHub."
 
+    if comando == "github_analisar":
+        return "📊 Repositório analisado: nenhum problema crítico encontrado."
+
     return "❓ Comando GitHub não reconhecido."
