@@ -4,15 +4,15 @@ class GitHubIntent:
         mensagem = mensagem.lower()
 
         if "criar repositório" in mensagem or "novo repo" in mensagem:
-            return "github_criar_repo"
+            return {"intencao": "github_criar_repo"}
 
         if "corrigir bug" in mensagem or "arrumar erro" in mensagem:
-            return "github_corrigir_bug"
+            return {"intencao": "github_corrigir_bug"}
 
         if "sincronizar projeto" in mensagem or "atualizar no github" in mensagem:
-            return "github_sync"
+            return {"intencao": "github_sync"}
 
-        if "analisar repositório" in mensagem or "verificar repo" in mensagem or "inspecionar código" in mensagem:
-            return "github_analisar"
+        if "analisar repositório" in mensagem or "verificar repo" in mensagem:
+            return {"intencao": "github_analisar"}
 
         return None
