@@ -1,16 +1,19 @@
-def executar(contexto):
-    comando = contexto.get("comando")
+def suporta_intencao(intencao):
+    return intencao in ["github_criar_repo", "github_corrigir_bug", "github_sync", "github_analisar"]
 
-    if comando == "github_criar_repo":
+def handle_comando(comando, historico):
+    intencao = comando["intencao"]
+
+    if intencao == "github_criar_repo":
         return "✅ Repositório GitHub criado com sucesso."
 
-    if comando == "github_corrigir_bug":
+    if intencao == "github_corrigir_bug":
         return "🛠️ Bug identificado e corrigido no repositório."
 
-    if comando == "github_sync":
+    if intencao == "github_sync":
         return "🔄 Projeto sincronizado com o GitHub."
 
-    if comando == "github_analisar":
+    if intencao == "github_analisar":
         return "📊 Repositório analisado: nenhum problema crítico encontrado."
 
-    return "❓ Comando GitHub não reconhecido."
+    return "🔍 Comando GitHub não reconhecido."
