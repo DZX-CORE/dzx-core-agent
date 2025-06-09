@@ -1,6 +1,8 @@
 import gradio as gr
 
 def responder(mensagem, historico):
+    if historico is None:
+        historico = []
     resposta = f"Você disse: {mensagem}"
     historico.append((mensagem, resposta))
     return historico
@@ -8,12 +10,8 @@ def responder(mensagem, historico):
 chat = gr.ChatInterface(
     fn=responder,
     title="Chat Simples Estilo ChatGPT",
-    description="Converse com este chat simples, estilo ChatGPT, usando apenas Gradio.",
-    theme="soft",  # visual mais limpo
-    examples=["Olá!", "Como você está?", "O que você pode fazer?"],
-    retry_btn="Tentar novamente",
-    undo_btn="Desfazer",
-    clear_btn="Limpar",
+    description="Converse com este chat simples.",
+    examples=["Olá", "Como você está?", "Qual seu nome?"],
 )
 
 if __name__ == "__main__":
