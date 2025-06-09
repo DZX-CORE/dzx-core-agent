@@ -1,21 +1,19 @@
-class GitHubPlugin:
-    def suporta_intencao(self, intencao: str) -> bool:
-        return intencao in [
-            "github_analisar",
-            "github_criar",
-            "github_listar"
-        ]
+class GitHubIntent:
+    def __init__(self):
+        # Inicializações necessárias, se houver
+        pass
 
-    def handle_comando(self, comando: dict, historico: list) -> str:
-        intencao = comando["intencao"]
+    def detectar(self, mensagem):
+        # Exemplo simples de detecção baseada em palavras-chave
+        if "repositório" in mensagem.lower() or "github" in mensagem.lower():
+            return {"intencao": "analise_repositorio", "detalhes": mensagem}
+        return None
 
-        if intencao == "github_analisar":
-            return "🔍 Analisando o repositório... (simulado)"
+    def suporta_intencao(self, intencao):
+        return intencao == "analise_repositorio"
 
-        elif intencao == "github_criar":
-            return "📁 Criando um novo repositório no GitHub... (simulado)"
-
-        elif intencao == "github_listar":
-            return "📃 Listando seus repositórios... (simulado)"
-
-        return "❌ Comando não reconhecido pelo plugin do GitHub."
+    def handle_comando(self, comando, historico):
+        # Exemplo simples de resposta
+        if comando["intencao"] == "analise_repositorio":
+            return f"Analisando seu repositório com base na mensagem: {comando['detalhes']}"
+        return None
