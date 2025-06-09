@@ -1,15 +1,7 @@
-import re
-
-def detectar_intencao(mensagem: str) -> dict | None:
-    msg = mensagem.lower()
-    if "github" in msg and "repositório" in msg:
-        m = re.search(r"usuario (\w+)", msg)
-        usuario = m.group(1) if m else None
+def detectar(mensagem):
+    if "atualize o repositório" in mensagem.lower():
         return {
-            "intencao": "github_operacao",
-            "parametros": {
-                "acao": "listar_repos",
-                "usuario": usuario
-            }
+            "intencao": "atualizar_repositorio",
+            "parametros": {}
         }
     return None
