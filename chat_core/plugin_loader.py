@@ -3,7 +3,7 @@ import importlib.util
 
 def carregar_plugins():
     plugins = []
-    pasta = os.path.join(os.path.dirname(__file__), "../plugins")  # <-- aqui
+    pasta = "plugins"
 
     if not os.path.exists(pasta):
         print(f"⚠️ Pasta '{pasta}' não existe.")
@@ -20,7 +20,8 @@ def carregar_plugins():
 
             for nome_classe in dir(modulo):
                 cls = getattr(modulo, nome_classe)
-                if hasattr(cls, "handle_comando") and callable(getattr(cls, "handle_comando")):
+                if isinstance(cls, type) and hasattr(cls, "suporta_intencao") and callable(getattr(cls, "suporta_intencao")):
                     plugins.append(cls())
 
+    print(f"🔌 Plugins carregados: {[p.__class__.__name__ for p in plugins]}")
     return plugins
