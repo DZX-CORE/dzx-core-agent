@@ -1,4 +1,3 @@
-# chat_core/plugin_loader.py
 import os
 import importlib.util
 
@@ -15,7 +14,8 @@ def carregar_plugins():
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
 
-            if hasattr(module, "handle"):
+            # Plugins precisam ter essas duas funções para serem carregados
+            if hasattr(module, "suporta_intencao") and hasattr(module, "handle_comando"):
                 plugins.append(module)
 
     return plugins
