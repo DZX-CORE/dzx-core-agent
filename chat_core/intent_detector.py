@@ -3,7 +3,7 @@ import importlib.util
 
 def carregar_detectores():
     detectores = []
-    pasta = os.path.join(os.path.dirname(__file__), "../intent_plugins")  # <-- aqui
+    pasta = "intent_plugins"
 
     if not os.path.exists(pasta):
         print(f"⚠️ Pasta '{pasta}' não existe.")
@@ -24,3 +24,10 @@ def carregar_detectores():
                     detectores.append(cls)
 
     return detectores
+
+def detectar_intencao(mensagem):
+    for detector in carregar_detectores():
+        resultado = detector.detectar(mensagem)
+        if resultado:
+            return resultado
+    return None
