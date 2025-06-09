@@ -1,19 +1,21 @@
-def suporta_intencao(intencao):
-    return intencao in ["github_criar_repo", "github_corrigir_bug", "github_sync", "github_analisar"]
+class GitHubPlugin:
+    def suporta_intencao(self, intencao: str) -> bool:
+        return intencao in [
+            "github_analisar",
+            "github_criar",
+            "github_listar"
+        ]
 
-def handle_comando(comando, historico):
-    intencao = comando["intencao"]
+    def handle_comando(self, comando: dict, historico: list) -> str:
+        intencao = comando["intencao"]
 
-    if intencao == "github_criar_repo":
-        return "✅ Repositório GitHub criado com sucesso."
+        if intencao == "github_analisar":
+            return "🔍 Analisando o repositório... (simulado)"
 
-    if intencao == "github_corrigir_bug":
-        return "🛠️ Bug identificado e corrigido no repositório."
+        elif intencao == "github_criar":
+            return "📁 Criando um novo repositório no GitHub... (simulado)"
 
-    if intencao == "github_sync":
-        return "🔄 Projeto sincronizado com o GitHub."
+        elif intencao == "github_listar":
+            return "📃 Listando seus repositórios... (simulado)"
 
-    if intencao == "github_analisar":
-        return "📊 Repositório analisado: nenhum problema crítico encontrado."
-
-    return "🔍 Comando GitHub não reconhecido."
+        return "❌ Comando não reconhecido pelo plugin do GitHub."
