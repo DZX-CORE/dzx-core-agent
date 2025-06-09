@@ -1,17 +1,11 @@
+# main_chat.py
 import gradio as gr
-
-def responder(mensagem, historico):
-    if historico is None:
-        historico = []
-    resposta = f"Você disse: {mensagem}"
-    historico.append((mensagem, resposta))
-    return historico
+from chat_core.responder import responder
 
 chat = gr.ChatInterface(
     fn=responder,
-    title="Chat Simples Estilo ChatGPT",
-    description="Converse com este chat simples.",
-    examples=["Olá", "Como você está?", "Qual seu nome?"],
+    title="Assistente Modular",
+    description="Chat modular pronto para evoluir.",
 )
 
 if __name__ == "__main__":
