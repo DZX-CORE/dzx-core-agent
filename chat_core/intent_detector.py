@@ -20,8 +20,9 @@ def carregar_detectores():
 
             for nome_classe in dir(modulo):
                 cls = getattr(modulo, nome_classe)
-                if hasattr(cls, "detectar") and callable(getattr(cls, "detectar")):
-                    detectores.append(cls)
+                # Verifica se é classe e se tem método detectar
+                if isinstance(cls, type) and hasattr(cls, "detectar") and callable(getattr(cls, "detectar")):
+                    detectores.append(cls())  # instancia aqui
 
     return detectores
 
