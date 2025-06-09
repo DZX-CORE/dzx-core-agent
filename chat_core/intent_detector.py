@@ -20,15 +20,18 @@ def carregar_detectores():
 
             for nome_classe in dir(modulo):
                 cls = getattr(modulo, nome_classe)
-                # Verifica se é classe e se tem método detectar
                 if isinstance(cls, type) and hasattr(cls, "detectar") and callable(getattr(cls, "detectar")):
-                    detectores.append(cls())  # instancia aqui
+                    detectores.append(cls())
 
     return detectores
 
 def detectar_intencao(mensagem):
-    for detector in carregar_detectores():
+    detectores = carregar_detectores()
+    print(f"🔍 Detectores carregados: {[d.__class__.__name__ for d in detectores]}")
+
+    for detector in detectores:
         resultado = detector.detectar(mensagem)
+        print(f"➡️ {detector.__class__.__name__} => {resultado}")
         if resultado:
             return resultado
     return None
