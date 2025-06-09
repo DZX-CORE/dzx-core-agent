@@ -2,7 +2,7 @@ import os
 import importlib.util
 
 def carregar_plugins():
-    plugins = {}
+    plugins = []
     pasta = "plugins"
 
     if not os.path.exists(pasta):
@@ -18,15 +18,11 @@ def carregar_plugins():
             modulo = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(modulo)
 
-            if hasattr(modulo, "executar") and callable(modulo.executar):
-                plugins[nome_modulo] = modulo.executar
+            for nome_classe in dir(modulo):
+                cls = getattr(modulo, nome_classe)
+
+                if isinstance(cls, type) and hasattr(cls, "suporta_intencao") and hasattr(cls, "handle_comando"):
+                    instancia = cls()
+                    plugins.append(instancia)
 
     return plugins
-
-def executar_plugin(comando, contexto=None):
-    plugins = carregar_plugins()
-
-    if comando in plugins:
-        return plugins[comando](contexto or {})
-    else:
-        return f"❌ Nenhum plugin encontrado para o comando '{comando}'."
