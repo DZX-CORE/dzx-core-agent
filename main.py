@@ -1,38 +1,43 @@
-
 import os
-import asyncio
-from orquestrador.github_manager import GitHubManager
-from orquestrador.claude_client import ClaudeClient
-from orquestrador.error_detector import ErrorDetector
-from orquestrador.correction_loop import CorrectionLoop
+from dotenv import load_dotenv
+
+from orquestrador.utils import clonar_repositorio
+from orquestrador.error_detector import detectar_erros
+from orquestrador.claude_interface import gerar_resposta_claude
+from orquestrador.github_interface import aplicar_corrigido
 from orquestrador.telegram_bot import TelegramBot
 
+load_dotenv()
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+CLAUDE_TOKEN = os.getenv("CLAUDE_API_KEY")
 
-PASTA_PROJETO = "./repositorio_trabalho"
-BRANCH_CORRECAO = "correcao-automatica"
+def callback_repositorio(link):
+    path = "./repositorio_trabalho"
 
-github_manager = GitHubManager(GITHUB_TOKEN)
-claude_client = ClaudeClient(CLAUDE_API_KEY)
+    if os.path.exists(path):
+        print(f"Pasta {path} já existe, removendo...")
+        os.system(f"rm -rf {path}")
 
-async def callback_repositorio(repo_url, update, context):
-    pasta = PASTA_PROJETO
-    github_manager.clonar_repositorio(repo_url, pasta)
+    print(f"Clonando {link} para {path}...")
+    clonar_repositorio(link, path)
 
-    error_detector = ErrorDetector(pasta)
-    correction_loop = CorrectionLoop(
-        github_manager, claude_client, error_detector,
-        pasta, repo_url.split("github.com/")[-1].replace(".git", ""), BRANCH_CORRECAO
-    )
+    erros = detectar_erros(path)
+    if not erros:
+        print("Nenhum erro detectado. Projeto parece estar OK.")
+        return
 
-    correction_loop.executar_loop_correcao()
-    await update.message.reply_text("Loop de correção finalizado ou interrompido.")
+    print("Enviando erros para o Claude...")
+    resposta = gerar_resposta_claude(erros, CLAUDE_TOKEN)
+
+    print("Aplicando correções propostas...")
+    aplicar_corrigido(resposta, path, GITHUB_TOKEN, link)
+    print("Loop de correção finalizado ou interrompido.")
 
 def main():
+    print(f"Token TELEGRAM_TOKEN do .env: {TELEGRAM_TOKEN}")
     bot = TelegramBot(TELEGRAM_TOKEN, callback_repositorio)
-    bot.iniciar_bot()
+    bot.run()
 
 if __name__ == "__main__":
     main()
