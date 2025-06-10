@@ -1,4 +1,9 @@
+import sys
 import os
+
+# Garante que o diretório atual esteja no PYTHONPATH para importar os módulos locais
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from dotenv import load_dotenv
 
 from orquestrador.utils import clonar_repositorio
@@ -7,6 +12,7 @@ from orquestrador.claude_interface import gerar_resposta_claude
 from orquestrador.github_interface import aplicar_corrigido
 from orquestrador.telegram_bot import TelegramBot
 
+# Carrega variáveis do .env
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
