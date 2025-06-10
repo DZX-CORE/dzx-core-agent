@@ -1,14 +1,14 @@
 import os
+import py_compile
 
-class ErrorDetector:
-    def __init__(self, pasta_projeto):
-        self.pasta = pasta_projeto
-
-    def detectar_erro(self):
-        # Simulação: procura arquivo de log de erro (exemplo)
-        caminho_log = os.path.join(self.pasta, "error.log")
-        if os.path.exists(caminho_log):
-            with open(caminho_log, "r") as f:
-                logs = f.read()
-            return logs
-        return None
+def detectar_erros(path_repositorio: str) -> list:
+    erros = []
+    for root, _, files in os.walk(path_repositorio):
+        for file in files:
+            if file.endswith(".py"):
+                full_path = os.path.join(root, file)
+                try:
+                    py_compile.compile(full_path, doraise=True)
+                except py_compile.PyCompileError as e:
+                    erros.append(str(e))
+    return erros
